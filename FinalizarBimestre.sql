@@ -8,13 +8,17 @@ CREATE OR ALTER PROCEDURE FinalizarBimestre
 AS
 BEGIN
     UPDATE MATRICULA
-    SET MEDIAFINAL = (N1 + N2 + N3 + N4) / 4,
+    SET 
+        TOTALFALTAS = (F1 + F2 + F3 + F4),
+        MEDIAFINAL = (N1 + N2 + N3 + N4) / 4,
+        PERCFREQ = 100 - (((F1 + F2 + F3 + F4) * 144) / 100),
         RESULTADO = CASE
-                       WHEN (N1 + N2 + N3 + N4) / 4 >= 7 THEN 'APROVADO'
+                       WHEN (N1 + N2 + N3 + N4) / 4 >= 7 AND PERCFREQ > 75 THEN 'APROVADO'
+                       WHEN (N1 + N2 + N3 + N4) / 4 < 7 AND PERCFREQ > 75 THEN 'EXAME'
                        ELSE 'REPROVADO'
                     END
     WHERE MATRICULA = @MATRICULA
       AND PERLETIVO = @PERLETIVO
       AND MATERIA = @MATERIA
-      AND CURSO = @CURSO
+      AND CURSO = @CURSO;
 END;
