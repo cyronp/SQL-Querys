@@ -8,5 +8,3 @@ AS BEGIN
     VALUES (@NOME)
     SELECT SCOPE_IDENTITY() AS PROFESSOR
 END
-
-EXEC AdicionarProfessor @NOME = 'Leanderson'
