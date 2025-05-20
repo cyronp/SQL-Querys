@@ -1,0 +1,42 @@
+CREATE OR ALTER PROCEDURE CadastrarExame 
+(
+    @MATRICULA INT,
+    @CURSO CHAR(3),
+    @MATERIA CHAR(3),
+    @PERLETIVO INT,
+    @NOTAEXAME FLOAT
+)
+AS
+BEGIN
+    UPDATE MATRICULA
+    SET 
+        NOTAEXAME = @NOTAEXAME,
+        MEDIAFINAL = CASE
+        WHEN (MEDIAFINAL + @NOTAEXAME) / 2 > 10 
+        THEN 10
+        ELSE (MEDIAFINAL + @NOTAEXAME) / 2
+        END, 
+        RESULTADO = CASE 
+                        WHEN (MEDIAFINAL + @NOTAEXAME) / 2 >= 7 THEN 'APROVADO'
+                        ELSE 'REPROVADO'
+                    END
+    WHERE MATRICULA = @MATRICULA
+      AND CURSO = @CURSO
+      AND MATERIA = @MATERIA
+      AND PERLETIVO = @PERLETIVO;
+
+    SELECT 
+        MATRICULA,
+        CURSO,
+        MATERIA,
+        MEDIAFINAL,
+        NOTAEXAME,
+        (MEDIAFINAL + NOTAEXAME) / 2 AS MediaComExame,
+        RESULTADO
+    FROM MATRICULA
+    WHERE MATRICULA = @MATRICULA
+      AND CURSO = @CURSO
+      AND MATERIA = @MATERIA
+      AND PERLETIVO = @PERLETIVO;
+END;
+GO
