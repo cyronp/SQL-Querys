@@ -19,5 +19,3 @@ BEGIN
     WHERE CURSO = @CURSO;
 END;
 
-
-EXEC RegistrarMatricula @MATRICULA = 1, @CURSO = 'ENG', @PERLETIVO = 2025
